@@ -1,0 +1,33 @@
+setwd("Z:\\0.4.DMC\\__ 2021 RQ MASTER DOWNLOAD")
+
+library(plyr)
+library(readr)
+library(dplyr)
+library(xlsx)
+library(stringr)
+
+
+files<-list.files(path = "Z:\\0.4.DMC\\__ 2021 RQ MASTER DOWNLOAD", recursive = T)
+
+##myfiles<- list.files(path="Z:\\0.4.DMC\\__ 2021 RQ MASTER DOWNLOAD\\102921")
+##myfiles
+
+dataexcel<- ldply(files, read_excel, sheet=1)
+dataexcel
+
+##dataexcel$RUNTIME
+
+split<-colsplit(dataexcel$RUNDATE, "", names = c("1", "Date"))
+split2<-drop(split$Date)
+
+is.numeric (split2)
+
+##as.Date(split2, format="%Y-%M-%D")
+dataexcel3<-cbind(dataexcel, split2)
+
+dataexcel4<-select(dataexcel3, -c(RUNDATE))
+
+dplyr::rename(dataexcel4, RUNDATE=split2)
+
+setwd("C:\\Users\\charina.tingson\\Desktop\\Database")
+write.csv(dataexcel4, "RQ MASTER DOWNLOAD.csv")
